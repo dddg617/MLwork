@@ -12,6 +12,7 @@ This is the Group Work for Machine Learning Course.
 - At each layer, we calculate the coefficient:
 
 $$
+
 \alpha_{ij} = \frac{exp(LeakyReLU(a^T[Wh_i||Wh_j||W_r r_{\psi(<i,j>)}]))}{\Sigma_{k\in\mathcal{E}}{exp(LeakyReLU(a^T[Wh_i||Wh_k||W_r r_{\psi(<i,k>)}]))}}
 
 $$
@@ -35,5 +36,5 @@ $$
 ## How to run
 
 ```bash
-python simplehgn_trainer.py --n_epoch 200 --num_heads 4 --in_dim 256 --edge_dim 64 --hidden_dim 128 --out_dim 64--num_layers 2 --batch_size 64 --feat_drop 0.2 --negative_slope 0.2 --beta 0.2 --clip 1.0 --max_lr 1e-3
+python simplehgn_trainer.py --n_epoch 200 --num_heads 4 --in_dim 256 --edge_dim 64 --hidden_dim 128 --out_dim 64 --num_layers 2 --batch_size 64 --feat_drop 0.2 --negative_slope 0.2 --beta 0.2 --clip 1.0 --max_lr 1e-3
 ```
