@@ -25,7 +25,7 @@ def train(model, G):
     best_test_acc = torch.tensor(0)
     train_step = torch.tensor(0)
     g = dgl.to_homogeneous(G, ndata = "h")
-    fanouts = [-1] * args.n_layers
+    fanouts = [-1] * args.num_layers
     sampler = dgl.dataloading.NeighborSampler(fanouts)
     train_loader = dgl.dataloading.DataLoader(g, train_idx.to(device), sampler,
                                             batch_size=args.batch_size, device=device,
@@ -54,7 +54,7 @@ def train(model, G):
         scheduler.step(train_step)
         if epoch % 5 == 0:
             model.eval()
-            h = model(g, g.ndata['h'])["paper"]
+            h = model(G, G.ndata['h'])['paper']
             logits = out(h)
             pred = logits.argmax(1).cpu()
 
@@ -142,19 +142,21 @@ for ntype in G.ntypes:
     G.nodes[ntype].data["h"] = emb
 
 G = G.to(device)
-
+in_dim = [args.in_dim] + [args.hidden_dim] * args.num_layers
+heads = [args.num_heads] * args.num_layers + [1]
 model = SimpleHGNLayer(
     args.edge_dim,
     len(G.etypes),
-    args.in_dim,
+    in_dim,
     args.hidden_dim,
     args.out_dim,
     args.num_layers,
-    args.num_heads,
+    heads,
     args.feat_drop,
     args.negative_slope,
-    residual=True,
-    beta = args.beta,
+    True,
+    args.beta,
+    G.ntypes,
     ).to(device)
 optimizer = torch.optim.AdamW(model.parameters())
 scheduler = torch.optim.lr_scheduler.OneCycleLR(

@@ -64,8 +64,9 @@ class SimpleHGNLayer(nn.Module):
     """    
     def __init__(self, edge_dim, num_etypes, in_dim, hidden_dim, num_classes,
                 num_layers, heads, feat_drop, negative_slope,
-                residual, beta):
+                residual, beta, ntypes):
         super(SimpleHGNLayer, self).__init__()
+        self.ntypes = ntypes
         self.num_layers = num_layers
         self.hgn_layers = nn.ModuleList()
         self.activation = F.elu
