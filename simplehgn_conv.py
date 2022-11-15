@@ -125,8 +125,7 @@ class SimpleHGNConv(nn.Module):
             g.srcdata['emb'] = emb
             g.update_all(Fn.u_mul_e('emb', 'alpha', 'm'),
                          Fn.sum('m', 'emb'))
-            # g.apply_edges(Fn.u_mul_e('emb', 'alpha', 'm'))
-            h_output = g.ndata['emb'].view(-1, self.out_dim * self.num_heads)
+            h_output = g.dstdata['emb'].view(-1, self.out_dim * self.num_heads)
             # h_prime = []
             # for i in range(self.num_heads):
             #     g.edata['alpha'] = edge_attention[:, i]
@@ -137,6 +136,8 @@ class SimpleHGNConv(nn.Module):
             # h_output = torch.cat(h_prime, dim=1)
 
         g.edata['alpha'] = edge_attention
+        if g.is_block:
+            h = h[:g.num_dst_nodes()]
         if self.residual:
             res = self.residual(h)
             h_output += res

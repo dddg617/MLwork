@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from simplehgn_conv import SimpleHGNConv
 
-class SimpleHGN(nn.Module):
+class SimpleHGNLayer(nn.Module):
     r"""
     This is a model SimpleHGN from `Are we really making much progress? Revisiting, benchmarking, and
     refining heterogeneous graph neural networks
@@ -65,7 +65,7 @@ class SimpleHGN(nn.Module):
     def __init__(self, edge_dim, num_etypes, in_dim, hidden_dim, num_classes,
                 num_layers, heads, feat_drop, negative_slope,
                 residual, beta):
-        super(SimpleHGN, self).__init__()
+        super(SimpleHGNLayer, self).__init__()
         self.num_layers = num_layers
         self.hgn_layers = nn.ModuleList()
         self.activation = F.elu
@@ -134,18 +134,23 @@ class SimpleHGN(nn.Module):
         dict
             The embeddings after the output projection.
         """
-        with hg.local_scope():
-            hg.ndata['h'] = h_dict
-            g = dgl.to_homogeneous(hg, ndata = 'h')
-            h = g.ndata['h']
-            for l in range(self.num_layers):  # noqa E741
-                h = self.hgn_layers[l](g, h, g.ndata['_TYPE'], g.edata['_TYPE'], True)
-                h = h.flatten(1)
+        if hasattr(hg, 'ntypes'):
+            # full graph training,
+            with hg.local_scope():
+                hg.ndata['h'] = h_dict
+                g = dgl.to_homogeneous(hg, ndata = 'h')
+                h = g.ndata['h']
+                for l in range(self.num_layers):  # noqa E741
+                    h = self.hgn_layers[l](g, h, g.ndata['_TYPE'], g.edata['_TYPE'], True)
+                    h = h.flatten(1)
 
-        h_dict = to_hetero_feat(h, g.ndata['_TYPE'], hg.ntypes)
-        # g.ndata['h'] = h
-        # hg = dgl.to_heterogeneous(g, hg.ntypes, hg.etypes)
-        # h_dict = hg.ndata['h']
+            h_dict = to_hetero_feat(h, g.ndata['_TYPE'], hg.ntypes)
+        else:
+            # for minibatch training, input h_dict is a tensor
+            h = h_dict
+            for layer, block in zip(self.hgn_layers, hg):
+                h = layer(block, h, block.ndata['_TYPE']['_N'], block.edata['_TYPE'], presorted=False)
+            h_dict = to_hetero_feat(h, block.ndata['_TYPE']['_N'][:block.num_dst_nodes()], self.ntypes)
 
         return h_dict
 
