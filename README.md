@@ -33,6 +33,22 @@ $$
 
 - Finally, a multi-head attention is used.
 
+## Dataset information
+|             | author | paper | Subject | Paper-Author | Paper-Subject | Features  | Train | Val | Test  |
+| ----------- | ------ | ----- | ------- | ------------ | ------------- | --------- | ----- | --- | ----- |
+| acm4GTN     | 5,912  | 3,025 | 57      | 9,936        | 3,025         | 1,902     | 600   | 300 | 2,125 |
+
+|             | author | conference |  paper  | author-paper | conference-paper | Features  | Train | Val | Test  |
+| ----------- | ------ | ---------- | ------- | ------------ | ---------------- | --------- | ----- | --- | ----- |
+| dblp4GTN    |  4057  |     20     |  14328  |    19645     |      19645       |    334    |  800  | 400 | 2857  |
+
+## Accuracy(%)
+|        | acm4GTN | dblp4GTN |
+| ------ | ------- | -------- |
+| valid  |  98.67  |   94.75  |
+|  test  |  98.21  |   94.71  |
+ 
+
 ## Requirements
 - Python >= 3.6
 - Pytorch >= 1.9.0

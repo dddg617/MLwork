@@ -44,7 +44,6 @@ torch.manual_seed(0)
 data = GTNDataset(args.dataset)
 hg = data.__getitem__()
 category = data.category
-print(hg.ndata)
 train_mask = hg.nodes[category].data.pop('train_mask')
 val_mask = hg.nodes[category].data.pop('val_mask')
 test_mask = hg.nodes[category].data.pop('test_mask')
