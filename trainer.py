@@ -1,16 +1,11 @@
 import argparse
-import tqdm
-import urllib.request
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import numpy as np
-import scipy.io
 from dataset import GTNDataset
 from model import SimpleHGNLayer
 
-import dgl
 from dgl.nn.pytorch import HeteroLinear
 
 
@@ -26,7 +21,7 @@ def get_n_params(model):
 parser = argparse.ArgumentParser(
     description="Training SimpleHGN"
 )
-parser.add_argument("--dataset", type=str, default="imdb4GTN")
+parser.add_argument("--dataset", type=str, default="acm4GTN")
 parser.add_argument("--n_epoch", type=int, default=200)
 parser.add_argument("--num_heads", type=int, default=4)
 parser.add_argument("--in_dim", type=int, default=256)

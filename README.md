@@ -33,8 +33,14 @@ $$
 
 - Finally, a multi-head attention is used.
 
+## Requirements
+- Python >= 3.6
+- Pytorch >= 1.9.0
+- DGL >= 0.8.0
+
+
 ## How to run
 
 ```bash
-python simplehgn_trainer.py --n_epoch 200 --num_heads 4 --in_dim 256 --edge_dim 64 --hidden_dim 128 --out_dim 64 --num_layers 2 --batch_size 64 --feat_drop 0.2 --negative_slope 0.2 --beta 0.2 --clip 1.0 --max_lr 1e-3
+python simplehgn_trainer.py --dataset acm4GTN --n_epoch 200 --num_heads 4 --in_dim 256 --edge_dim 64 --hidden_dim 128 --out_dim 64 --num_layers 2 --feat_drop 0.2 --negative_slope 0.2 --beta 0.2 --clip 1.0 --max_lr 1e-3
 ```

@@ -1,4 +1,3 @@
-import dgl
 import torch
 import torch.nn as nn
 import dgl.function as Fn
