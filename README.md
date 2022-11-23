@@ -12,9 +12,7 @@ This is the Group Work for Machine Learning Course.
 - At each layer, we calculate the coefficient:
 
 $$
-
 \alpha_{ij} = \frac{exp(LeakyReLU(a^T[Wh_i||Wh_j||W_r r_{\psi(<i,j>)}]))}{\Sigma_{k\in\mathcal{E}}{exp(LeakyReLU(a^T[Wh_i||Wh_k||W_r r_{\psi(<i,k>)}]))}}
-
 $$
 
 - Residual connection including Node residual
