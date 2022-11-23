@@ -38,7 +38,7 @@ $$
 
 |             | author | conference |  paper  | author-paper | conference-paper | Features  | Train | Val | Test  |
 | ----------- | ------ | ---------- | ------- | ------------ | ---------------- | --------- | ----- | --- | ----- |
-| dblp4GTN    |  4057  |     20     |  14328  |    19645     |      19645       |    334    |  800  | 400 | 2857  |
+| dblp4GTN    |  4057  |     20     |  14328  |    19645     |      14328       |    334    |  800  | 400 | 2857  |
 
 ## Accuracy(%)
 |        | acm4GTN | dblp4GTN |
