@@ -35,6 +35,7 @@ parser.add_argument("--negative_slope", type=float, default=0.2)
 parser.add_argument("--beta", type=float, default=0.2)
 parser.add_argument("--clip", type=float, default=1.0)
 parser.add_argument("--max_lr", type=float, default=1e-3)
+parser.add_argument("--n_bases", type=int, default=40)
 
 args = parser.parse_args()
 
@@ -76,7 +77,7 @@ if args.model == "SimpleHGN":
         hg.ntypes,
         ).to(device)
 elif args.model == "RGCN":
-    model = RGCN(args.in_dim, args.hidden_dim, args.out_dim, hg.etypes, 40).to(device)
+    model = RGCN(args.in_dim, args.hidden_dim, args.out_dim, hg.etypes, args.n_bases).to(device)
 else:
     raise DGLError("Unsupport model \"{}\". We can only support SimpleHGN or RGCN".format(args.model))
 dim = {}
