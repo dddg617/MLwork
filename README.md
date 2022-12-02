@@ -41,10 +41,42 @@ $$
 | dblp4GTN    |  4057  |     20     |  14328  |    19645     |      14328       |    334    |  800  | 400 | 2857  |
 
 ## Accuracy(%)
-|        | acm4GTN | dblp4GTN |
-| ------ | ------- | -------- |
-| valid  |  98.67  |   94.75  |
-|  test  |  98.21  |   94.71  |
+<table>
+   <tr>
+      <td></td>
+      <td colspan="2" align="center">acm4GTN</td>
+      <td colspan="2" align="center">dblp4GTN</td>
+   </tr>
+   <tr>
+      <td>Model</td>
+      <td>valid</td>
+      <td>test</td>
+      <td>valid</td>
+      <td>test</td>
+   </tr>
+   <tr>
+      <td>GTN(paper)</td>
+      <td>-</td>
+      <td>92.68</td>
+      <td>-</td>
+      <td>94.18</td>
+   </tr>
+   <tr>
+      <td>RGCN</td>
+      <td><b>95.67</b></td>
+      <td><b>95.15</b></td>
+      <td>94.50</td>
+      <td>93.91</td>
+   </tr>
+   <tr>
+      <td>SimpleHGN</td>
+      <td>98.67</td>
+      <td>98.21</td>
+      <td>95.75</td>
+      <td>95.90</td>
+   </tr>
+
+</table>
  
 
 ## Requirements

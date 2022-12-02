@@ -4,10 +4,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from dataset import GTNDataset
-from model import SimpleHGNLayer
+from model import SimpleHGNLayer, RGCN
 
+from dgl import DGLError
 from dgl.nn.pytorch import HeteroLinear
-
 
 def get_n_params(model):
     pp = 0
@@ -21,6 +21,7 @@ def get_n_params(model):
 parser = argparse.ArgumentParser(
     description="Training SimpleHGN"
 )
+parser.add_argument("--model", type=str, default="SimpleHGN")
 parser.add_argument("--dataset", type=str, default="acm4GTN")
 parser.add_argument("--n_epoch", type=int, default=200)
 parser.add_argument("--num_heads", type=int, default=4)
@@ -41,6 +42,8 @@ device = torch.device("cuda:1")
 
 torch.manual_seed(0)
 
+if args.dataset not in ["acm4GTN", "dblp4GTN"]:
+    raise DGLError("Unsupport dataset {}. We only support acm4GTN or dblp4GTN".format(args.dataset))
 data = GTNDataset(args.dataset)
 hg = data.__getitem__()
 category = data.category
@@ -57,20 +60,25 @@ best_test_acc = torch.tensor(0)
 train_step = torch.tensor(0)
 in_dim = [args.in_dim] + [args.hidden_dim] * args.num_layers
 heads = [args.num_heads] * args.num_layers + [1]
-model = SimpleHGNLayer(
-    args.edge_dim,
-    len(hg.etypes),
-    in_dim,
-    args.hidden_dim,
-    args.out_dim,
-    args.num_layers,
-    heads,
-    args.feat_drop,
-    args.negative_slope,
-    True,
-    args.beta,
-    hg.ntypes,
-    ).to(device)
+if args.model == "SimpleHGN":
+    model = SimpleHGNLayer(
+        args.edge_dim,
+        len(hg.etypes),
+        in_dim,
+        args.hidden_dim,
+        args.out_dim,
+        args.num_layers,
+        heads,
+        args.feat_drop,
+        args.negative_slope,
+        True,
+        args.beta,
+        hg.ntypes,
+        ).to(device)
+elif args.model == "RGCN":
+    model = RGCN(args.in_dim, args.hidden_dim, args.out_dim, hg.etypes, 40).to(device)
+else:
+    raise DGLError("Unsupport model \"{}\". We can only support SimpleHGN or RGCN".format(args.model))
 dim = {}
 for ntype in hg.ntypes:
     dim[ntype] = hg.ndata['h'][ntype].shape[1]
