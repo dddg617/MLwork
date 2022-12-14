@@ -47,7 +47,7 @@ class GTNDataset(DGLBuiltinDataset):
     >>> dataset = GTNDataset(name='imdb4GTN')
     >>> graph = dataset[0]
     """
-
+ 
     def __init__(self, name, raw_dir=None, force_reload=False, verbose=False,
                  transform=None):
         assert name in ['dblp4GTN', 'acm4GTN', 'imdb4GTN']
